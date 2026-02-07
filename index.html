@@ -3,191 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comex | Gerador de Follow-up Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Kaizen Admin | Setup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0f172a; /* Navy Deep */
-            --accent: #3b82f6;  /* Royal Blue */
-            --surface: #ffffff;
-            --text: #1e293b;
-            --border: #e2e8f0;
+            --bg-deep: #0b0e14;
+            --primary: #38bdf8;
+            --glass: rgba(30, 41, 59, 0.7);
+            --text: #f8fafc;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f8fafc;
+            background-color: var(--bg-deep);
             color: var(--text);
-            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            margin: 0;
+            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #0b0e14 100%);
         }
 
-        .container {
-            background: var(--surface);
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        .admin-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
             width: 100%;
-            max-width: 500px;
-            border: 1px solid var(--border);
+            max-width: 450px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
         }
 
         h1 {
+            text-align: center;
             color: var(--primary);
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-size: 1.5rem;
-        }
-
-        p.subtitle {
-            color: #64748b;
-            font-size: 0.9rem;
+            letter-spacing: 2px;
             margin-bottom: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            font-size: 1.2rem;
         }
 
         label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 5px;
             display: block;
-            margin-bottom: 0.4rem;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #475569;
+            margin-top: 15px;
         }
 
         input {
             width: 100%;
             padding: 12px;
-            background: #f1f5f9;
-            border: 1px solid transparent;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 8px;
+            color: white;
             font-family: 'Poppins', sans-serif;
-            color: var(--primary);
             box-sizing: border-box;
-            transition: all 0.2s;
         }
 
         input:focus {
             outline: none;
-            background: #fff;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
         }
 
         button {
             width: 100%;
-            padding: 16px;
+            margin-top: 2rem;
+            padding: 15px;
             background: var(--primary);
-            color: white;
-            font-weight: 600;
+            color: #0b0e14;
+            font-weight: 700;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 1rem;
-            font-size: 1rem;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         button:hover {
+            box-shadow: 0 0 20px var(--primary);
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.3);
         }
 
-        button:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        #loader {
+        .loader {
             display: none;
             text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: var(--accent);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: var(--primary);
         }
     </style>
 </head>
 <body>
+    <div class="admin-card">
+        <h1>Kaizen Monitor Setup</h1>
+        <form id="form">
+            <label>CLIENTE</label>
+            <input type="text" id="cliente" placeholder="Ex: Tech Industries" required>
 
-    <div class="container">
-        <h1>Novo Follow-up</h1>
-        <p class="subtitle">Insira os dados para gerar o dashboard do cliente.</p>
-        
-        <form id="logisticsForm">
-            <div class="form-group">
-                <label>Cliente</label>
-                <input type="text" id="cliente" placeholder="Ex: Global Imports SA" required>
-            </div>
+            <label>PROCESSO / PRODUTO</label>
+            <input type="text" id="produto" placeholder="Ex: PO-9090 / Microchips" required>
 
-            <div class="form-group">
-                <label>Produto / Processo</label>
-                <input type="text" id="produto" placeholder="Ex: PO-4022 / Peças Automotivas" required>
-            </div>
-
-            <div class="row">
-                <div class="form-group">
-                    <label>Origem</label>
-                    <input type="text" id="origem" placeholder="Ex: Hamburg" required>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div>
+                    <label>ORIGEM</label>
+                    <input type="text" id="origem" placeholder="Shanghai" required>
                 </div>
-                <div class="form-group">
-                    <label>Destino</label>
-                    <input type="text" id="destino" placeholder="Ex: Santos" required>
+                <div>
+                    <label>DESTINO</label>
+                    <input type="text" id="destino" placeholder="Santos" required>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="form-group">
-                    <label>Fim Produção</label>
-                    <input type="date" id="dataProducao" required>
-                </div>
-                <div class="form-group">
-                    <label>ETD (Embarque)</label>
-                    <input type="date" id="dataEmbarque" required>
-                </div>
-            </div>
+            <label>FIM PRODUÇÃO</label>
+            <input type="date" id="dataProducao" required>
 
-            <div class="form-group">
-                <label>ETA (Chegada)</label>
-                <input type="date" id="dataChegada" required>
-            </div>
+            <label>EMBARQUE (ETD)</label>
+            <input type="date" id="dataEmbarque" required>
 
-            <button type="submit" id="btnGerar">Gerar Visualização Premium</button>
+            <label>CHEGADA (ETA)</label>
+            <input type="date" id="dataChegada" required>
+
+            <button type="submit" id="btn">Gerar Link do Cliente</button>
         </form>
-
-        <div id="loader">
-            <span style="display:block; font-weight:600;">Processando Inteligência Logística...</span>
-            Analisando rotas, clima e gerando mapa visual.
-        </div>
+        <div class="loader" id="loader">Processing Intelligence...</div>
     </div>
 
     <script>
-        document.getElementById('logisticsForm').addEventListener('submit', async (e) => {
+        document.getElementById('form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const btn = document.getElementById('btnGerar');
+            const btn = document.getElementById('btn');
             const loader = document.getElementById('loader');
             
             btn.disabled = true;
-            btn.innerText = "Gerando...";
+            btn.innerText = "Generating...";
             loader.style.display = 'block';
 
             const payload = {
@@ -203,28 +158,21 @@
             };
 
             try {
-                const response = await fetch('/api/ai', {
+                const res = await fetch('/api/ai', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(payload)
                 });
-
-                const data = await response.json();
-
-                if (data.result) {
-                    const newWindow = window.open();
-                    newWindow.document.write(data.result);
-                    newWindow.document.close();
-                } else {
-                    alert('Erro ao gerar relatório.');
-                }
-
-            } catch (error) {
-                console.error(error);
-                alert('Erro de conexão.');
+                const data = await res.json();
+                
+                const win = window.open();
+                win.document.write(data.result);
+                win.document.close();
+            } catch (err) {
+                alert('Erro.');
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Gerar Visualização Premium";
+                btn.innerText = "Gerar Link do Cliente";
                 loader.style.display = 'none';
             }
         });
