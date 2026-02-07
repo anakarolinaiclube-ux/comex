@@ -1,6 +1,6 @@
 {
-  "name": "comex-tracking-premium",
-  "version": "1.0.0",
+  "name": "kaizen-monitor",
+  "version": "3.0.0",
   "dependencies": {
     "openai": "^4.0.0"
   }
