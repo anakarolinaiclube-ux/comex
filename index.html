@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComexTrack | Gerador de Follow-up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a192f;
+            --accent: #64ffda;
+            --text: #e6f1ff;
+            --bg: #020c1b;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #112240;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px -10px rgba(2,12,27,0.7);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #8892b0;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 1.2rem;
+            background: #0a192f;
+            border: 1px solid #233554;
+            color: var(--text);
+            border-radius: 4px;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent);
+            color: var(--bg);
+            font-weight: 700;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #8892b0;
+            cursor: not-allowed;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #8892b0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Admin Logística</h1>
+        <form id="logisticsForm">
+            <label>Cliente</label>
+            <input type="text" id="cliente" placeholder="Ex: Importadora XYZ" required>
+
+            <label>Produto / Processo</label>
+            <input type="text" id="produto" placeholder="Ex: PO-2930 / Eletrônicos" required>
+
+            <label>Origem (Porto/Cidade)</label>
+            <input type="text" id="origem" placeholder="Ex: Shanghai, China" required>
+
+            <label>Destino (Porto/Cidade)</label>
+            <input type="text" id="destino" placeholder="Ex: Santos, Brasil" required>
+
+            <label>Fim de Produção</label>
+            <input type="date" id="dataProducao" required>
+
+            <label>Data de Embarque (ETD)</label>
+            <input type="date" id="dataEmbarque" required>
+
+            <label>Previsão de Chegada (ETA)</label>
+            <input type="date" id="dataChegada" required>
+
+            <button type="submit" id="btnGerar">Gerar Dashboard Visual</button>
+        </form>
+
+        <div class="loader" id="loader">
+            Analisando rotas marítimas, clima e gerando timeline...<br>Isso pode levar alguns segundos.
+        </div>
+        
+        <div class="footer">
+            Sistema MVP de Acompanhamento Logístico
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('logisticsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('btnGerar');
+            const loader = document.getElementById('loader');
+            
+            btn.disabled = true;
+            btn.innerText = "Processando...";
+            loader.style.display = 'block';
+
+            const payload = {
+                cliente: document.getElementById('cliente').value,
+                produto: document.getElementById('produto').value,
+                origem: document.getElementById('origem').value,
+                destino: document.getElementById('destino').value,
+                dates: {
+                    producao: document.getElementById('dataProducao').value,
+                    embarque: document.getElementById('dataEmbarque').value,
+                    chegada: document.getElementById('dataChegada').value
+                }
+            };
+
+            try {
+                const response = await fetch('/api/ai', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (data.result) {
+                    // Abre o resultado em uma nova aba para visualização/impressão
+                    const newWindow = window.open();
+                    newWindow.document.write(data.result);
+                    newWindow.document.close();
+                } else {
+                    alert('Erro ao gerar relatório.');
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert('Erro de conexão.');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Gerar Dashboard Visual";
+                loader.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
