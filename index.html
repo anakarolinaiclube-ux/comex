@@ -3,209 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaizen | Logistics Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Comex | Gerador de Follow-up Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #030712; /* Slate 950+ */
-            --surface: #111827; /* Slate 900 */
-            --border: #1f2937; /* Slate 800 */
-            --text-main: #f9fafb;
-            --text-muted: #9ca3af;
-            --primary: #3b82f6; /* Blue 500 */
-            --primary-glow: rgba(59, 130, 246, 0.5);
-            --gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --primary: #0f172a; /* Navy Deep */
+            --accent: #3b82f6;  /* Royal Blue */
+            --surface: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            color: var(--text);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
         }
 
-        .glass-panel {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            padding: 3rem;
+        .container {
+            background: var(--surface);
+            padding: 2.5rem;
             border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             width: 100%;
-            max-width: 480px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Ambient Glow effect */
-        .glass-panel::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, rgba(56, 189, 248, 0.08) 0%, transparent 50%);
-            z-index: -1;
-            pointer-events: none;
+            max-width: 500px;
+            border: 1px solid var(--border);
         }
 
         h1 {
-            font-weight: 500;
-            letter-spacing: -0.02em;
-            margin-bottom: 2rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
             font-size: 1.5rem;
-            background: linear-gradient(to right, #fff, #9ca3af);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
         }
 
-        .input-group {
-            margin-bottom: 1.5rem;
+        p.subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
         }
 
         label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             font-size: 0.85rem;
-            color: var(--text-muted);
             font-weight: 500;
+            color: #475569;
         }
 
         input {
             width: 100%;
-            padding: 12px 16px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border);
-            color: var(--text-main);
+            padding: 12px;
+            background: #f1f5f9;
+            border: 1px solid transparent;
             border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary);
             box-sizing: border-box;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
         input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            background: #fff;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
         }
 
         button {
             width: 100%;
-            padding: 14px;
-            background: var(--text-main);
-            color: #000;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
             font-weight: 600;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.95rem;
+            transition: transform 0.2s, box-shadow 0.2s;
             margin-top: 1rem;
+            font-size: 1rem;
         }
 
         button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.3);
         }
 
         button:disabled {
-            background: var(--border);
-            color: var(--text-muted);
+            background: #94a3b8;
             cursor: not-allowed;
             transform: none;
         }
 
-        .status-bar {
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            margin-top: 2rem;
-            overflow: hidden;
+        #loader {
             display: none;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--gradient);
-            width: 0%;
-            transition: width 0.3s ease;
-            animation: load 2s infinite;
-        }
-
-        @keyframes load {
-            0% { width: 0%; transform: translateX(-100%); }
-            50% { width: 50%; }
-            100% { width: 100%; transform: translateX(100%); }
-        }
-
-        .brand {
             text-align: center;
-            margin-top: 2rem;
-            color: #4b5563;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
         }
     </style>
 </head>
 <body>
 
-    <div class="glass-panel">
-        <h1>New Shipment Track</h1>
+    <div class="container">
+        <h1>Novo Follow-up</h1>
+        <p class="subtitle">Insira os dados para gerar o dashboard do cliente.</p>
+        
         <form id="logisticsForm">
-            <div class="input-group">
-                <label>Client Organization</label>
-                <input type="text" id="cliente" placeholder="e.g. Acme Corp Global" required>
+            <div class="form-group">
+                <label>Cliente</label>
+                <input type="text" id="cliente" placeholder="Ex: Global Imports SA" required>
             </div>
 
-            <div class="input-group">
-                <label>Reference / Commodity</label>
-                <input type="text" id="produto" placeholder="e.g. PO-9921 / Microchips" required>
+            <div class="form-group">
+                <label>Produto / Processo</label>
+                <input type="text" id="produto" placeholder="Ex: PO-4022 / Peças Automotivas" required>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div class="input-group">
-                    <label>Origin</label>
-                    <input type="text" id="origem" placeholder="e.g. Shenzhen" required>
+            <div class="row">
+                <div class="form-group">
+                    <label>Origem</label>
+                    <input type="text" id="origem" placeholder="Ex: Hamburg" required>
                 </div>
-                <div class="input-group">
-                    <label>Destination</label>
-                    <input type="text" id="destino" placeholder="e.g. Rotterdam" required>
+                <div class="form-group">
+                    <label>Destino</label>
+                    <input type="text" id="destino" placeholder="Ex: Santos" required>
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
-                <div class="input-group">
-                    <label>Production</label>
+            <div class="row">
+                <div class="form-group">
+                    <label>Fim Produção</label>
                     <input type="date" id="dataProducao" required>
                 </div>
-                <div class="input-group">
-                    <label>ETD</label>
+                <div class="form-group">
+                    <label>ETD (Embarque)</label>
                     <input type="date" id="dataEmbarque" required>
-                </div>
-                <div class="input-group">
-                    <label>ETA</label>
-                    <input type="date" id="dataChegada" required>
                 </div>
             </div>
 
-            <button type="submit" id="btnGerar">Generate Intelligence Report</button>
+            <div class="form-group">
+                <label>ETA (Chegada)</label>
+                <input type="date" id="dataChegada" required>
+            </div>
+
+            <button type="submit" id="btnGerar">Gerar Visualização Premium</button>
         </form>
 
-        <div class="status-bar" id="loader">
-            <div class="progress-fill"></div>
+        <div id="loader">
+            <span style="display:block; font-weight:600;">Processando Inteligência Logística...</span>
+            Analisando rotas, clima e gerando mapa visual.
         </div>
-        
-        <div class="brand">Kaizen Intelligence System</div>
     </div>
 
     <script>
@@ -216,7 +187,7 @@
             const loader = document.getElementById('loader');
             
             btn.disabled = true;
-            btn.innerText = "Processing Logic...";
+            btn.innerText = "Gerando...";
             loader.style.display = 'block';
 
             const payload = {
@@ -245,15 +216,15 @@
                     newWindow.document.write(data.result);
                     newWindow.document.close();
                 } else {
-                    alert('Error generating report.');
+                    alert('Erro ao gerar relatório.');
                 }
 
             } catch (error) {
                 console.error(error);
-                alert('Connection error.');
+                alert('Erro de conexão.');
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Generate Intelligence Report";
+                btn.innerText = "Gerar Visualização Premium";
                 loader.style.display = 'none';
             }
         });
