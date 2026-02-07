@@ -3,177 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaizen Admin | Setup</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Comex Flow | Intelligent Tracking</title>
+    <!-- Font Awesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-deep: #0b0e14;
-            --primary: #38bdf8;
-            --glass: rgba(30, 41, 59, 0.7);
-            --text: #f8fafc;
+            --primary: #0f172a; /* Navy Blue */
+            --secondary: #334155;
+            --accent: #0ea5e9; /* Ocean Blue */
+            --success: #10b981;
+            --bg-color: #f1f5f9;
+            --text-main: #1e293b;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-deep);
-            color: var(--text);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 20%);
+            color: var(--text-main);
             min-height: 100vh;
-            margin: 0;
-            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #0b0e14 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .admin-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            padding: 3rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+        /* Header */
+        header {
             width: 100%;
-            max-width: 450px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            background: var(--primary);
+            color: var(--white);
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        h1 {
-            text-align: center;
-            color: var(--primary);
-            font-weight: 600;
-            letter-spacing: 2px;
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--success));
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 2rem auto;
+        }
+
+        /* Form Card */
+        .input-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
             margin-bottom: 2rem;
-            text-transform: uppercase;
-            font-size: 1.2rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
         }
 
         label {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-bottom: 5px;
             display: block;
-            margin-top: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        input {
+        input, select {
             width: 100%;
-            padding: 12px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            color: white;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
             font-family: 'Poppins', sans-serif;
-            box-sizing: border-box;
+            transition: all 0.3s;
         }
 
         input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
         }
 
         button {
-            width: 100%;
-            margin-top: 2rem;
-            padding: 15px;
             background: var(--primary);
-            color: #0b0e14;
-            font-weight: 700;
+            color: var(--white);
             border: none;
-            border-radius: 8px;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            width: 100%;
+            font-size: 1rem;
+            transition: transform 0.2s, background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         button:hover {
-            box-shadow: 0 0 20px var(--primary);
+            background: #1e293b;
             transform: translateY(-2px);
         }
 
+        /* Loading */
         .loader {
             display: none;
-            text-align: center;
-            margin-top: 1rem;
-            font-size: 0.8rem;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* AI Result Area Styling */
+        #result-area {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Estilos genéricos para o HTML gerado pela IA */
+        .dashboard-container {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-body {
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .timeline-container {
+            position: relative;
+            padding: 2rem 0;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Tracejado da rota */
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-image: linear-gradient(to right, var(--secondary) 50%, transparent 50%);
+            background-size: 20px 100%;
+            z-index: 0;
+        }
+
+        .timeline-point {
+            position: relative;
+            z-index: 1;
+            background: var(--white);
+            border: 2px solid var(--accent);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
             color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.8);
+        }
+
+        .timeline-label {
+            position: absolute;
+            top: 60px;
+            width: 120px;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transform: translateX(-35px); /* Ajuste grosseiro para centralizar */
+        }
+
+        .insight-box {
+            background: #ecfeff;
+            border: 1px solid #cffafe;
+            color: #155e75;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="admin-card">
-        <h1>Kaizen Monitor Setup</h1>
-        <form id="form">
-            <label>CLIENTE</label>
-            <input type="text" id="cliente" placeholder="Ex: Tech Industries" required>
 
-            <label>PROCESSO / PRODUTO</label>
-            <input type="text" id="produto" placeholder="Ex: PO-9090 / Microchips" required>
+    <header>
+        <h2><i class="fa-solid fa-anchor"></i> ComexFlow AI</h2>
+        <p style="font-size: 0.8rem; opacity: 0.8;">Gerador de Status Operacional</p>
+    </header>
 
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <div>
-                    <label>ORIGEM</label>
-                    <input type="text" id="origem" placeholder="Shanghai" required>
+    <div class="container">
+        
+        <!-- Input Section -->
+        <div class="input-card" id="input-section">
+            <h3 style="margin-bottom: 1.5rem; color: var(--primary);">Dados do Processo</h3>
+            <form id="comex-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>PO Number / Ref</label>
+                        <input type="text" name="poNumber" placeholder="PO-2023-885" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data Prontidão</label>
+                        <input type="date" name="productionDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Porto Origem</label>
+                        <input type="text" name="origin" placeholder="Ex: Shanghai, CN" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Porto Destino</label>
+                        <input type="text" name="destination" placeholder="Ex: Santos, BR" required>
+                    </div>
+                    <div class="form-group full">
+                        <label>ETD Previsto (Embarque)</label>
+                        <input type="date" name="shippingDate" required>
+                    </div>
                 </div>
-                <div>
-                    <label>DESTINO</label>
-                    <input type="text" id="destino" placeholder="Santos" required>
-                </div>
-            </div>
+                <button type="submit" id="generate-btn">
+                    <span id="btn-text">Gerar Dashboard do Cliente</span>
+                    <div class="loader" id="loader"></div>
+                </button>
+            </form>
+        </div>
 
-            <label>FIM PRODUÇÃO</label>
-            <input type="date" id="dataProducao" required>
+        <!-- Result Section -->
+        <div id="result-area"></div>
 
-            <label>EMBARQUE (ETD)</label>
-            <input type="date" id="dataEmbarque" required>
-
-            <label>CHEGADA (ETA)</label>
-            <input type="date" id="dataChegada" required>
-
-            <button type="submit" id="btn">Gerar Link do Cliente</button>
-        </form>
-        <div class="loader" id="loader">Processing Intelligence...</div>
     </div>
 
     <script>
-        document.getElementById('form').addEventListener('submit', async (e) => {
+        document.getElementById('comex-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btn');
-            const loader = document.getElementById('loader');
             
-            btn.disabled = true;
-            btn.innerText = "Generating...";
-            loader.style.display = 'block';
+            const btn = document.getElementById('generate-btn');
+            const loader = document.getElementById('loader');
+            const btnText = document.getElementById('btn-text');
+            const resultArea = document.getElementById('result-area');
 
-            const payload = {
-                cliente: document.getElementById('cliente').value,
-                produto: document.getElementById('produto').value,
-                origem: document.getElementById('origem').value,
-                destino: document.getElementById('destino').value,
-                dates: {
-                    producao: document.getElementById('dataProducao').value,
-                    embarque: document.getElementById('dataEmbarque').value,
-                    chegada: document.getElementById('dataChegada').value
-                }
-            };
+            // UI Loading State
+            btn.disabled = true;
+            loader.style.display = 'block';
+            btnText.style.display = 'none';
+            resultArea.innerHTML = '';
+
+            // Coleta dados
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
 
             try {
-                const res = await fetch('/api/ai', {
+                const response = await fetch('/api/ai', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(payload)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
                 });
-                const data = await res.json();
+
+                const json = await response.json();
                 
-                const win = window.open();
-                win.document.write(data.result);
-                win.document.close();
-            } catch (err) {
-                alert('Erro.');
+                if (json.result) {
+                    resultArea.innerHTML = json.result;
+                    // Scroll suave até o resultado
+                    resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    resultArea.innerHTML = '<p style="color:red; text-align:center;">Erro ao gerar dados.</p>';
+                }
+
+            } catch (error) {
+                console.error(error);
+                resultArea.innerHTML = '<p style="color:red; text-align:center;">Falha na conexão.</p>';
             } finally {
+                // Reset UI
                 btn.disabled = false;
-                btn.innerText = "Gerar Link do Cliente";
                 loader.style.display = 'none';
+                btnText.style.display = 'block';
             }
         });
     </script>
