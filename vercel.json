@@ -1,7 +1,5 @@
 {
-  "functions": {
-    "api/ai.js": {
-      "maxDuration": 60
-    }
-  }
+  "rewrites": [
+    { "source": "/api/ai", "destination": "/api/ai.js" }
+  ]
 }
