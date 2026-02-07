@@ -11,83 +11,83 @@ export default async function handler(req, res) {
 
   const { cliente, produto, origem, destino, dates } = req.body;
 
-  // Calculando status base para ajudar a IA
+  // Lógica simples para determinar o "Status do Topo"
   const today = new Date();
-  const dateChegada = new Date(dates.chegada);
-  const diffTime = dateChegada - today;
-  const daysUntil = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const eta = new Date(dates.chegada);
+  const diffTime = eta - today;
+  const daysDiff = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   
-  // Define status de risco simulado
-  let statusRisk = "ON SCHEDULE";
+  let statusBadge = "🟢 ON SCHEDULE";
   let statusColor = "#10b981"; // Green
-  if(daysUntil < 0) { statusRisk = "DELAYED"; statusColor = "#ef4444"; }
-  else if(daysUntil < 5) { statusRisk = "ARRIVING SOON"; statusColor = "#3b82f6"; }
+  
+  if (daysDiff < 0) {
+      statusBadge = "🔴 DELAYED";
+      statusColor = "#ef4444"; // Red
+  } else if (daysDiff < 7) {
+      statusBadge = "🟡 ARRIVING SOON";
+      statusColor = "#f59e0b"; // Yellow
+  }
 
   const prompt = `
-    Role: You are a Senior Product Designer and Logistics Analyst specializing in "FreightTech".
-    Task: Generate a single-file, responsive HTML + CSS dashboard. 
+    Aja como um Product Designer Sênior e Analista de Comércio Exterior (Logistics Expert).
     
-    Context:
-    - Client: ${cliente}
-    - Commodity: ${produto}
-    - Route: ${origem} to ${destino}
-    - Dates: Prod(${dates.producao}) -> ETD(${dates.embarque}) -> ETA(${dates.chegada})
-    - Days to ETA: ${daysUntil} (if negative, it is delayed)
+    TAREFA:
+    Gere um código HTML completo (único arquivo) para uma página de "Tracking de Pedido Premium".
+    
+    CONTEXTO DO PEDIDO:
+    - Cliente: ${cliente}
+    - Produto: ${produto}
+    - Rota: ${origem} para ${destino}
+    - Datas: Produção (${dates.producao}), ETD (${dates.embarque}), ETA (${dates.chegada}).
+    - Status Geral: ${statusBadge}
 
-    DESIGN REQUIREMENTS (MANDATORY):
-    1. **Style**: Dark mode (Midnight Blue/Black). References: Linear, Vercel, Stripe.
-    2. **Typography**: 'Inter' or 'Poppins'. Clean, tracking-wide.
-    3. **Background**: A deep radial gradient #020617 to #0f172a.
-    4. **Glassmorphism**: Cards must use backdrop-filter: blur(12px) and rgba(255,255,255,0.03) backgrounds with subtle 1px borders.
-    5. **Hero Section (SVG Map)**: 
-       - Create an SVG inline background in the header. 
-       - Draw abstract world dots (faint).
-       - Draw a curved Bezier line connecting a point on the left (Origin) to the right (Dest). 
-       - Animate a dash moving along the line (CSS @keyframes).
-       - Add a "pulse" effect on the origin and destination dots.
+    DIRETRIZES VISUAIS (ESTRITO):
+    1. **Tipografia**: 'Poppins', sans-serif.
+    2. **Paleta**: Fundo Azul Marinho Profundo (#0f172a), Texto Branco/Cinza Claro, Detalhes em Azul Neon ou Dourado.
+    3. **Cards**: Use estilo "Glassmorphism" (fundo translúcido, borda fina, sombra suave).
+    4. **Header Hero**: 
+       - Deve ter um fundo com um SVG INLINE (código direto no HTML).
+       - O SVG deve desenhar linhas curvas abstratas simulando rotas marítimas.
+       - Pontos (círculos) pulsando na esquerda (origem) e direita (destino).
+       - Uma linha tracejada animada conectando os dois.
+    5. **Timeline Horizontal**:
+       - 5 Etapas: Produção Finalizada -> Embarcado -> Em Trânsito -> Próximo ao Destino -> Entregue.
+       - Use lógica de datas para marcar as etapas concluídas com uma cor sólida e a etapa atual com um efeito "Glow" (brilho).
+    6. **Grid de Cards**: 
+       - Clima na Origem (invente dados realistas).
+       - Status do Navio (Ex: Em navegação, Velocidade 14kn).
+       - Congestionamento Portuário.
+       - Previsão de Atraso.
 
-    CONTENT REQUIREMENTS:
-    1. **Header**: Client Name, Route, and a Status Badge (Top Right) saying "${statusRisk}" with color ${statusColor}.
-    2. **Timeline (Centerpiece)**: 
-       - Horizontal layout.
-       - 5 Steps: Production -> Dispatched -> In Transit -> Port of Discharge -> Final Delivery.
-       - Logic: Based on dates provided, highlight completed steps in Green/Blue, current step with a "Glow" effect, future steps in Gray.
-       - Show the Date below each step.
-    3. **Smart Grid (Cards)**:
-       - 4 Cards grid layout.
-       - Card 1: Live Weather at Origin (Invent realistic data based on location).
-       - Card 2: Vessel Status (e.g., "Main Engines Normal", "Speed 14kn").
-       - Card 3: Port Congestion Index (Low/Med/High).
-       - Card 4: Estimated Delay (e.g., "+2 Days", "On Time").
-    4. **AI Risk Analysis (The "Analyst" Persona)**:
-       - Write a paragraph analyzing the specific route (${origem} to ${destino}).
-       - Use expert terms: "TEU capacity", "Bunker Adjustment", "Customs clearance", "Typhoon risk" (if Asia), "Strike action" (if Europe/USA).
-       - Be realistic about current global logistics climate.
+    ANÁLISE LOGÍSTICA (TEXTO):
+    - Escreva um parágrafo de análise técnica como um especialista. 
+    - Use termos como: "Lead time", "Port Congestion", "Customs Clearance", "Vessel Capacity", "Weather patterns".
+    - Analise a rota específica (${origem} -> ${destino}) citando riscos reais (ex: Canal de Suez, Tufões na Ásia, Greves na Europa, etc).
 
-    OUTPUT FORMAT:
-    - Return ONLY valid HTML code starting with <!DOCTYPE html>.
-    - CSS must be embedded in <style>.
-    - Do NOT use Markdown blocks.
-    - Ensure it is responsive (mobile friendly).
-    - Footer: "Kaizen Intelligence System | v2.4".
+    ESTRUTURA DA RESPOSTA:
+    - Retorne APENAS o código HTML começando com <!DOCTYPE html>.
+    - O CSS deve estar embutido na tag <style>.
+    - Não use Markdown (sem \`\`\`).
   `;
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o", 
+      model: "gpt-4o", // Recomendado para gerar o SVG e CSS complexo corretamente
       messages: [
-        { role: "system", content: "You are a world-class UI/UX Designer who codes perfect HTML/CSS." },
+        { role: "system", content: "Você é um especialista em UI Design e Logística Internacional." },
         { role: "user", content: prompt }
       ],
       temperature: 0.7,
     });
 
     let htmlContent = completion.choices[0].message.content;
+
+    // Limpeza de segurança caso a IA insira markdown
     htmlContent = htmlContent.replace(/```html/g, '').replace(/```/g, '');
 
     res.status(200).json({ result: htmlContent });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'System Malfunction' });
+    res.status(500).json({ error: 'Erro ao gerar visualização.' });
   }
 }
