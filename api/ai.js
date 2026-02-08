@@ -5,54 +5,62 @@ const openai = new OpenAI({
 });
 
 export default async function handler(req, res) {
+  // Apenas aceita POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { poNumber, origin, destination, productionDate, shippingDate } = req.body;
-
   try {
+    const data = req.body;
+
     const prompt = `
       Você é um Consultor Sênior de Comércio Exterior e Logística Internacional.
-      Crie um DASHBOARD VISUAL em HTML puro (sem tags <html> ou <body>, apenas o conteúdo interno) para apresentar ao cliente.
       
       DADOS DO PROCESSO:
-      - PO Number: ${poNumber}
-      - Origem: ${origin}
-      - Destino: ${destination}
-      - Data Prontidão: ${productionDate}
-      - Data Embarque (ETD): ${shippingDate}
+      ${JSON.stringify(data)}
 
-      TAREFAS:
-      1. Calcule uma estimativa de ETA (Chegada) baseada na rota ${origin} -> ${destination} (seja realista com tempos de trânsito marítimo).
-      2. Crie uma "Barra de Progresso" visual simulando a rota.
-      3. Gere "Insights de Mercado": invente dados plausíveis sobre congestionamento no porto de origem, clima ou disponibilidade de containers para dar contexto profissional.
-      4. Use classes CSS que serão injetadas no frontend (padrão Tailwind ou classes semânticas simples).
+      OBJETIVO:
+      Gere um código HTML completo (apenas o conteúdo dentro da tag <body>, sem <html> ou <head> pois eu já tenho) para um Dashboard de Follow-up Executivo.
+      O design deve ser moderno, clean, usando classes do Tailwind CSS (que já está instalado).
       
-      ESTRUTURA DO HTML DE RESPOSTA:
-      - Um card de resumo com ícones (use <i> com classes font-awesome, ex: fa-ship).
-      - Uma timeline horizontal com 3 pontos: Origem -> Trânsito -> Destino.
-      - Uma seção de "Smart Insights" com um texto breve e profissional.
-      - Uma tabela pequena com as datas chaves (ETD, ETA estimado, Deadline).
-
-      Estilo deve ser minimalista, elegante, focado em dados. Não use Markdown, apenas HTML string.
+      ESTRUTURA DO DASHBOARD (HTML):
+      1. **Cabeçalho**: Resumo do PO, Cliente e Status Geral (Visualmente impactante).
+      2. **Timeline Visual**: Uma barra de progresso horizontal mostrando as etapas (Produção -> Booking -> Embarque -> Trânsito -> Chegada). Marque a etapa atual.
+      3. **Análise de Inteligência (AI Insights)**:
+         - Crie um texto profissional sobre a situação atual nos portos citados (invente dados plausíveis baseados em conhecimento geral de logística para os portos de origem/destino informados).
+         - Mencione riscos de congestionamento ou tendências de frete.
+      4. **Tabela Detalhada**: Organize os dados técnicos (Container, Navio, Pesos, Volumes) em uma tabela elegante.
+      5. **Gráficos (Charts)**:
+         - Inclua 2 elementos <canvas> com IDs únicos.
+         - Inclua uma tag <script> logo após os canvas que renderize dois gráficos usando Chart.js:
+           a) Um gráfico de "Breakdown de Tempo" (Dias em Produção vs Dias em Trânsito Estimado vs Dias Desembaraço).
+           b) Um gráfico de "Tendência de Custos/Frete" (Simulado para a rota específica nos últimos 3 meses).
+      
+      REGRAS DE FORMATAÇÃO:
+      - Use tipografia sans-serif.
+      - Cores: Azul Marinho (#1e293b), Verde Esmeralda para sucessos, Laranja para alertas.
+      - NÃO use markdown. Retorne apenas a string HTML crua.
+      - O script do Chart.js deve ser auto-executável.
     `;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // ou gpt-4
+      model: "gpt-4-turbo-preview", // Modelo mais capaz para gerar código e layout
       messages: [
-        { role: "system", content: "Você é um assistente especialista em UI de Dashboards para Logística." },
+        { role: "system", content: "Você é um especialista em frontend e logística. Você gera HTMLs ricos com Tailwind CSS e Scripts Chart.js embutidos." },
         { role: "user", content: prompt }
       ],
       temperature: 0.7,
     });
 
-    const htmlContent = completion.choices[0].message.content.replace(/```html|```/g, '');
+    let htmlContent = completion.choices[0].message.content;
 
-    res.status(200).json({ result: htmlContent });
+    // Limpeza básica caso a IA coloque markdown
+    htmlContent = htmlContent.replace(/```html/g, '').replace(/```/g, '');
+
+    return res.status(200).json({ result: htmlContent });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ result: "<div class='error'>Erro ao gerar dashboard. Verifique sua API Key.</div>" });
+    return res.status(500).json({ error: 'Erro ao gerar follow-up.' });
   }
 }
