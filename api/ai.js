@@ -5,7 +5,6 @@ const openai = new OpenAI({
 });
 
 export default async function handler(req, res) {
-  // Apenas aceita POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -14,53 +13,60 @@ export default async function handler(req, res) {
     const data = req.body;
 
     const prompt = `
-      Você é um Consultor Sênior de Comércio Exterior e Logística Internacional.
+      ATUE COMO: Um Analista Sênior de Logística Internacional e Inteligência de Mercado.
       
-      DADOS DO PROCESSO:
+      CONTEXTO:
+      Recebi os seguintes dados de um processo de importação/exportação:
       ${JSON.stringify(data)}
 
       OBJETIVO:
-      Gere um código HTML completo (apenas o conteúdo dentro da tag <body>, sem <html> ou <head> pois eu já tenho) para um Dashboard de Follow-up Executivo.
-      O design deve ser moderno, clean, usando classes do Tailwind CSS (que já está instalado).
+      Gere um componente HTML (apenas o conteúdo do <body>) visualmente rico e moderno usando Tailwind CSS.
       
-      ESTRUTURA DO DASHBOARD (HTML):
-      1. **Cabeçalho**: Resumo do PO, Cliente e Status Geral (Visualmente impactante).
-      2. **Timeline Visual**: Uma barra de progresso horizontal mostrando as etapas (Produção -> Booking -> Embarque -> Trânsito -> Chegada). Marque a etapa atual.
-      3. **Análise de Inteligência (AI Insights)**:
-         - Crie um texto profissional sobre a situação atual nos portos citados (invente dados plausíveis baseados em conhecimento geral de logística para os portos de origem/destino informados).
-         - Mencione riscos de congestionamento ou tendências de frete.
-      4. **Tabela Detalhada**: Organize os dados técnicos (Container, Navio, Pesos, Volumes) em uma tabela elegante.
-      5. **Gráficos (Charts)**:
-         - Inclua 2 elementos <canvas> com IDs únicos.
-         - Inclua uma tag <script> logo após os canvas que renderize dois gráficos usando Chart.js:
-           a) Um gráfico de "Breakdown de Tempo" (Dias em Produção vs Dias em Trânsito Estimado vs Dias Desembaraço).
-           b) Um gráfico de "Tendência de Custos/Frete" (Simulado para a rota específica nos últimos 3 meses).
+      ESTRUTURA OBRIGATÓRIA DO LAYOUT:
       
-      REGRAS DE FORMATAÇÃO:
-      - Use tipografia sans-serif.
-      - Cores: Azul Marinho (#1e293b), Verde Esmeralda para sucessos, Laranja para alertas.
-      - NÃO use markdown. Retorne apenas a string HTML crua.
-      - O script do Chart.js deve ser auto-executável.
+      1. **Barra de Progresso (Status Visual)**:
+         - Crie um "Stepper" horizontal visualmente atraente.
+         - Etapas: Booking -> Produção -> Embarque -> Trânsito Int. -> Chegada -> Desembaraço.
+         - Analise as datas fornecidas (${data.date_ready}, ${data.date_etd}, ${data.date_eta}) para determinar em qual etapa estamos HOJE e destaque-a com uma cor vibrante (ex: azul ou verde). As etapas passadas devem parecer "concluídas" e as futuras "pendentes".
+      
+      2. **Grid de Análise de Cenário (3 Colunas)**:
+         Crie 3 cartões (Cards) elegantes lado a lado (responsivo):
+         
+         - **CARD 1: Cenário de Trânsito Internacional**:
+           Invente uma análise plausível sobre a rota marítima/aérea entre ${data.port_origin} e ${data.port_dest}. Mencione rotas, taxas de frete atuais (tendência) ou riscos geopolíticos (ex: Mar Vermelho, Canal do Panamá) se aplicável à rota.
+         
+         - **CARD 2: Situação na Origem (${data.port_origin})**:
+           Invente uma análise baseada na data de prontidão/embarque. Mencione feriados locais (ex: Golden Week se for China, Carnaval se for Brasil), clima (tufões/tempestades) ou disponibilidade de containers vazios e trucks.
+         
+         - **CARD 3: Situação no Destino (${data.port_dest})**:
+           Invente uma análise sobre a previsão de chegada. Mencione congestionamento de berço, greves de fiscais, tempo médio de liberação ou clima esperado para a data de ETA.
+
+      DESIGN & TOM DE VOZ:
+      - Use ícones do FontAwesome (<i class="fa-solid fa-..."></i>) para ilustrar cada card.
+      - Tom profissional, executivo e tranquilizador, mas realista.
+      - Design "Clean", fundo branco ou cinza muito claro, sombras suaves.
+      - Tipografia Poppins (já carregada).
+      - NÃO retorne Markdown ou \`\`\`html. Apenas o código HTML cru.
     `;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview", // Modelo mais capaz para gerar código e layout
+      model: "gpt-4-turbo-preview",
       messages: [
-        { role: "system", content: "Você é um especialista em frontend e logística. Você gera HTMLs ricos com Tailwind CSS e Scripts Chart.js embutidos." },
+        { role: "system", content: "Você é um especialista em UI/UX e Logística. Você gera HTML limpo com Tailwind CSS." },
         { role: "user", content: prompt }
       ],
       temperature: 0.7,
     });
 
     let htmlContent = completion.choices[0].message.content;
-
-    // Limpeza básica caso a IA coloque markdown
+    
+    // Limpeza de segurança
     htmlContent = htmlContent.replace(/```html/g, '').replace(/```/g, '');
 
     return res.status(200).json({ result: htmlContent });
 
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Erro ao gerar follow-up.' });
+    return res.status(500).json({ error: 'Erro ao gerar análise.' });
   }
 }
