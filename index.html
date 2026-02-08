@@ -3,320 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comex Flow | Intelligent Tracking</title>
-    <!-- Font Awesome para Ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Poppins -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Comex Flow | Follow-up Inteligente</title>
     
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js (Necessário para os gráficos gerados pela IA) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        :root {
-            --primary: #0f172a; /* Navy Blue */
-            --secondary: #334155;
-            --accent: #0ea5e9; /* Ocean Blue */
-            --success: #10b981;
-            --bg-color: #f1f5f9;
-            --text-main: #1e293b;
-            --white: #ffffff;
+        body { font-family: 'Poppins', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.05) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 20%);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Header */
-        header {
-            width: 100%;
-            background: var(--primary);
-            color: var(--white);
-            padding: 1.5rem 0;
-            text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent), var(--success));
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1000px;
-            margin: 2rem auto;
-        }
-
-        /* Form Card */
-        .input-card {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-            margin-bottom: 2rem;
-            border: 1px solid #e2e8f0;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group.full {
-            grid-column: 1 / -1;
-        }
-
-        label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--secondary);
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
-        }
-
-        button {
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1rem;
-            transition: transform 0.2s, background 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        button:hover {
-            background: #1e293b;
-            transform: translateY(-2px);
-        }
-
-        /* Loading */
         .loader {
-            display: none;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--accent);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
+            border-top-color: #3B82F6;
+            -webkit-animation: spinner 1.5s linear infinite;
+            animation: spinner 1.5s linear infinite;
         }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* AI Result Area Styling */
-        #result-area {
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Estilos genéricos para o HTML gerado pela IA */
-        .dashboard-container {
-            background: var(--white);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        .dashboard-header {
-            background: var(--primary);
-            color: var(--white);
-            padding: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .dashboard-body {
-            padding: 2rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: #f8fafc;
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-left: 4px solid var(--accent);
-        }
-
-        .timeline-container {
-            position: relative;
-            padding: 2rem 0;
-            margin: 2rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        /* Tracejado da rota */
-        .timeline-line {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-image: linear-gradient(to right, var(--secondary) 50%, transparent 50%);
-            background-size: 20px 100%;
-            z-index: 0;
-        }
-
-        .timeline-point {
-            position: relative;
-            z-index: 1;
-            background: var(--white);
-            border: 2px solid var(--accent);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(255,255,255,0.8);
-        }
-
-        .timeline-label {
-            position: absolute;
-            top: 60px;
-            width: 120px;
-            text-align: center;
-            font-size: 0.8rem;
-            font-weight: 600;
-            transform: translateX(-35px); /* Ajuste grosseiro para centralizar */
-        }
-
-        .insight-box {
-            background: #ecfeff;
-            border: 1px solid #cffafe;
-            color: #155e75;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-top: 1.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .form-grid { grid-template-columns: 1fr; }
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-800 min-h-screen">
 
-    <header>
-        <h2><i class="fa-solid fa-anchor"></i> ComexFlow AI</h2>
-        <p style="font-size: 0.8rem; opacity: 0.8;">Gerador de Status Operacional</p>
-    </header>
+    <!-- Navbar -->
+    <nav class="bg-slate-800 border-b border-slate-700 p-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-ship text-blue-400 text-2xl"></i>
+                <h1 class="text-white text-xl font-bold tracking-wide">Comex<span class="text-blue-400">Flow</span> AI</h1>
+            </div>
+            <button class="text-slate-400 hover:text-white text-sm transition"><i class="fa-solid fa-user-gear mr-2"></i>Admin Panel</button>
+        </div>
+    </nav>
 
-    <div class="container">
+    <div class="max-w-7xl mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <!-- Input Section -->
-        <div class="input-card" id="input-section">
-            <h3 style="margin-bottom: 1.5rem; color: var(--primary);">Dados do Processo</h3>
-            <form id="comex-form">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>PO Number / Ref</label>
-                        <input type="text" name="poNumber" placeholder="PO-2023-885" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Data Prontidão</label>
-                        <input type="date" name="productionDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Porto Origem</label>
-                        <input type="text" name="origin" placeholder="Ex: Shanghai, CN" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Porto Destino</label>
-                        <input type="text" name="destination" placeholder="Ex: Santos, BR" required>
-                    </div>
-                    <div class="form-group full">
-                        <label>ETD Previsto (Embarque)</label>
-                        <input type="date" name="shippingDate" required>
-                    </div>
+        <!-- COLUNA 1: Formulário de Input (Admin) -->
+        <div class="lg:col-span-4 space-y-6">
+            <div class="glass-panel rounded-xl p-6 shadow-xl bg-white">
+                <div class="flex items-center gap-2 mb-6 border-b pb-4">
+                    <div class="bg-blue-100 p-2 rounded-lg text-blue-600"><i class="fa-solid fa-pen-to-square"></i></div>
+                    <h2 class="text-lg font-semibold text-slate-800">Dados do Processo</h2>
                 </div>
-                <button type="submit" id="generate-btn">
-                    <span id="btn-text">Gerar Dashboard do Cliente</span>
-                    <div class="loader" id="loader"></div>
-                </button>
-            </form>
+
+                <form id="comexForm" class="space-y-4">
+                    
+                    <!-- Referências -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">PO Number</label>
+                            <input type="text" name="po_number" placeholder="PO-2024-001" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Incoterm</label>
+                            <select name="incoterm" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-sm outline-none">
+                                <option>FOB</option>
+                                <option>EXW</option>
+                                <option>CIF</option>
+                                <option>DDP</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Partes -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Cliente / Importador</label>
+                        <input type="text" name="client" placeholder="Global Imports Ltda" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Fornecedor / Exportador</label>
+                        <input type="text" name="supplier" placeholder="Shenzhen Tech Co." class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-sm outline-none">
+                    </div>
+
+                    <!-- Logística -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Porto Origem</label>
+                            <input type="text" name="port_origin" placeholder="Shanghai, CN" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-sm outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Porto Destino</label>
+                            <input type="text" name="port_dest" placeholder="Santos, BR" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-sm outline-none" required>
+                        </div>
+                    </div>
+
+                    <!-- Detalhes Carga -->
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Modal</label>
+                            <select name="mode" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs outline-none">
+                                <option>Marítimo</option>
+                                <option>Aéreo</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Container</label>
+                            <select name="container_type" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs outline-none">
+                                <option>1x40'HQ</option>
+                                <option>1x20'GP</option>
+                                <option>LCL</option>
+                            </select>
+                        </div>
+                         <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">HS Code</label>
+                            <input type="text" name="hscode" placeholder="8504.40" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Datas -->
+                    <div class="border-t border-slate-100 pt-4 mt-2">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase mb-3">Cronograma</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-500 mb-1">Prontidão Carga (Ready Date)</label>
+                                <input type="date" name="date_ready" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-sm outline-none">
+                            </div>
+                             <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-500 mb-1">ETD Estimado</label>
+                                    <input type="date" name="date_etd" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-sm outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-500 mb-1">ETA Estimado</label>
+                                    <input type="date" name="date_eta" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-sm outline-none">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comentários Extras -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Observações do Admin</label>
+                        <textarea name="admin_notes" rows="2" placeholder="Ex: Aguardando liberação de BL..." class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-sm outline-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-medium py-3 rounded-lg shadow-lg transition transform hover:scale-[1.02] flex justify-center items-center gap-2">
+                        <span>Gerar Relatório IA</span>
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </button>
+                </form>
+            </div>
         </div>
 
-        <!-- Result Section -->
-        <div id="result-area"></div>
+        <!-- COLUNA 2: Resultado (Dashboard) -->
+        <div class="lg:col-span-8">
+            
+            <!-- Estado Vazio -->
+            <div id="emptyState" class="h-full flex flex-col justify-center items-center text-center p-12 bg-slate-800/50 rounded-xl border border-dashed border-slate-600">
+                <div class="bg-slate-700 p-4 rounded-full mb-4">
+                    <i class="fa-solid fa-chart-pie text-4xl text-slate-400"></i>
+                </div>
+                <h3 class="text-xl text-white font-medium mb-2">Aguardando Dados</h3>
+                <p class="text-slate-400 max-w-md">Preencha os dados do processo à esquerda para que nossa IA gere um follow-up visual completo para seu cliente.</p>
+            </div>
 
+            <!-- Estado Loading -->
+            <div id="loadingState" class="hidden h-full flex flex-col justify-center items-center text-center p-12">
+                <div class="loader ease-linear rounded-full border-4 border-t-4 border-slate-700 h-16 w-16 mb-6"></div>
+                <h3 class="text-xl text-white font-medium mb-2">Analisando Rotas e Dados...</h3>
+                <p class="text-slate-400">Consultando bases de logística e gerando gráficos.</p>
+            </div>
+
+            <!-- Resultado Renderizado -->
+            <div id="resultContainer" class="hidden bg-white rounded-xl shadow-2xl overflow-hidden min-h-[600px] relative">
+                <!-- Botão de Ação -->
+                <div class="absolute top-4 right-4 z-10 print:hidden">
+                    <button onclick="window.print()" class="bg-white/90 backdrop-blur border border-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-50 shadow-sm transition">
+                        <i class="fa-solid fa-print mr-2"></i>Salvar PDF
+                    </button>
+                </div>
+                
+                <!-- O HTML da API será injetado aqui -->
+                <div id="aiOutput" class="p-0"></div>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        document.getElementById('comex-form').addEventListener('submit', async (e) => {
+        document.getElementById('comexForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const btn = document.getElementById('generate-btn');
-            const loader = document.getElementById('loader');
-            const btnText = document.getElementById('btn-text');
-            const resultArea = document.getElementById('result-area');
+            // UI Transition
+            const emptyState = document.getElementById('emptyState');
+            const loadingState = document.getElementById('loadingState');
+            const resultContainer = document.getElementById('resultContainer');
+            const aiOutput = document.getElementById('aiOutput');
 
-            // UI Loading State
-            btn.disabled = true;
-            loader.style.display = 'block';
-            btnText.style.display = 'none';
-            resultArea.innerHTML = '';
+            emptyState.classList.add('hidden');
+            resultContainer.classList.add('hidden');
+            loadingState.classList.remove('hidden');
 
-            // Coleta dados
+            // Gather Data
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
 
@@ -328,23 +218,31 @@
                 });
 
                 const json = await response.json();
-                
+
                 if (json.result) {
-                    resultArea.innerHTML = json.result;
-                    // Scroll suave até o resultado
-                    resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    aiOutput.innerHTML = json.result;
+                    loadingState.classList.add('hidden');
+                    resultContainer.classList.remove('hidden');
+                    
+                    // Executar scripts retornados no HTML (Chart.js)
+                    // Segurança básica: cuidado ao executar scripts arbitrários em prod real
+                    const scripts = aiOutput.querySelectorAll('script');
+                    scripts.forEach(script => {
+                        const newScript = document.createElement('script');
+                        newScript.textContent = script.textContent;
+                        document.body.appendChild(newScript);
+                    });
                 } else {
-                    resultArea.innerHTML = '<p style="color:red; text-align:center;">Erro ao gerar dados.</p>';
+                    alert('Erro ao gerar resposta.');
+                    loadingState.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
                 }
 
-            } catch (error) {
-                console.error(error);
-                resultArea.innerHTML = '<p style="color:red; text-align:center;">Falha na conexão.</p>';
-            } finally {
-                // Reset UI
-                btn.disabled = false;
-                loader.style.display = 'none';
-                btnText.style.display = 'block';
+            } catch (err) {
+                console.error(err);
+                alert('Erro na comunicação com o servidor.');
+                loadingState.classList.add('hidden');
+                emptyState.classList.remove('hidden');
             }
         });
     </script>
