@@ -1,9 +1,12 @@
 {
-  "name": "comex-dashboard-ai",
+  "name": "comex-followup-ai",
   "version": "1.0.0",
-  "description": "Gerador de Dashboard de Rastreio Comex",
+  "description": "Gerador de Follow-up Inteligente para Comex",
   "main": "index.html",
+  "scripts": {
+    "start": "node api/ai.js"
+  },
   "dependencies": {
-    "openai": "^4.0.0"
+    "openai": "^4.28.0"
   }
 }
